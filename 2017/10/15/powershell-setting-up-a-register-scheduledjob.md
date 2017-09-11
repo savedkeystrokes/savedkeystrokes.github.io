@@ -1,8 +1,8 @@
 # Powershell: Setting up a Register-ScheduledJob
 
-Lets look at something that I did, I needed to keep an eye on all the recycle bins on a server, that was a separate problem, but I wanted to scheduled the job to occur once a week.
+Let's look at something that I did, I needed to keep an eye on all the recycle bins on a server, that was a separate problem, but I wanted to schedule the job to occur once a week.
 
-Incase you are interested the script to do the recycle clean looks like this
+Just in case you are interested the script to do the recycle clean looks like this
 
 ```powershell
 $Shell = New-Object -ComObject Shell.Application
@@ -28,7 +28,7 @@ I then needed it to run in an elevated state, so I needed to set some options.
 $options = New-ScheduledJobOption -RunElevated
 ```
 
-Then I wanted a trigger to run every monday at 7AM.
+Then I wanted a trigger to run every Monday at 7 AM.
 
 ```powershell
 $trigger = New-JobTrigger -DaysOfWeek Monday -At 07:00 -Weekly
