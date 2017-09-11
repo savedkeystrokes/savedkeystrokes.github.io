@@ -6,17 +6,17 @@ To solve this problem I was planning on writing a PowerShell script, using Power
 
 ## Background
 
-Many are aware of the reduction being applied to Microsoft OneDrive from 15GB to 5GB, for me this wasnt too bad, I was only around 0.5 over.
+Many are aware of the reduction being applied to Microsoft OneDrive from 15GB to 5GB, for me this wasn't too bad, I was only around 0.5 over.
 
-However my wife who is the primary chronicler for the family was running around 10GB.
+However; my wife who is the primary chronicler for the family was running around 10GB.
 
-Either way there was a need to remove some content from OneDrive.
+Either way, there was a need to remove some content from OneDrive.
 
 Some would say the easier option is to start using Google Drive, but where is the fun in that!
 
-## Looking at the Api
+## Looking at the API
 
-I started off looking at the api provided for onedrive [a demo of this is available on github for you to play with](https://github.com/OneDrive/onedrive-sdk-csharp), and there is a lot of fun that can be had with syncing a location on your machine with your onedrive.
+I started off looking at the API provided for OneDrive [a demo of this is available on GitHub for you to play with](https://github.com/OneDrive/onedrive-sdk-csharp), and there is a lot of fun that can be had with syncing a location on your machine with your OneDrive.
 
 However, I was constantly finding that I had to throttle the process a lot and if I was asking for too much too fast it would error out of the requests, waiting for even 5GB took some time.
 
@@ -28,19 +28,19 @@ I found an article that explained how to do it, and it was fairly straight forwa
 
 Starting in the browser, I signed into my wife's account and checked that she was sharing her camera sync with me and I had edit access, she was (step 1 complete, big tick). This had pictures for the last few years and a few videos, as I said earlier, in total was around 10GB hosted in OneDrive. To Share is easy, to the top right of a directory is a little circle, clicking on this selects it, so you can do multiple in one go.
 
-once you have selected all the files you are after you can click "Share" or you will also see something change on the right of thes screen, this tells you about the current level of sharing going on
+once you have selected all the files you are after you can click "Share" or you will also see something change on the right of the screen, this tells you about the current level of sharing going on
 
-<img src="https://keyboardsandmonkeys.files.wordpress.com/2016/07/share.png" alt="alt text" title="Share OneDrive directory" />
+![alt text][shared]
 
 From my OneDrive account (still in the browser), I clicked on shared and could see her camera drive shared with "Can Edit" showing.
 
-<img src="https://keyboardsandmonkeys.files.wordpress.com/2016/07/canedit.png" alt="alt text" title="Image of Camera Roll directory with Can Edit and checked" />
+![alt text][canedit]
 
 I clicked the little circle that appears in the top right of the folder and then chose "Add to my OneDrive", that added the file to my local sync.
 
 ![alt text][addtomyonedrive]
 
-I didnt have a folder called Camera Roll, not sure what would have happened if I did.
+I didn't have a folder called Camera Roll, not sure what would have happened if I did.
 
 ## Next steps
 
@@ -68,23 +68,23 @@ Move-Item -Path $item.FullName -Destination $to
 })
 ```
 
-__Just as an aside__ an interesting shortcut to remember in the ISE is `Ctrl + D`, this takes you to the command line, shown to me by a wise PowerShell Yogi / mentor and friend.
+__Just as an aside__ an interesting shortcut to remember in the ISE is `Ctrl + D`, this takes you to the command line, shown to me by a wise PowerShell Yogi/mentor and friend.
 
 ## Say what I see
 
 The behaviour is quite straight forward, the drive is mapped to where the files are and the stage is mapped to where I want them to go.
 
-What I then do with them is another story, I just wanted to get them primarily off the OneDrive and have some control about it.
+What I then do with them is another story, I just wanted to get them primarily off the OneDrive and have some control over it.
 
-So, I build a list of videos of mp4 and mov format in the location of my drive. Then for each of the items I replace the drive location with the stage location on the path, generate the directory structure and then move the file.
+So, I build a list of videos of mp4 and mov format in the location of my drive. Then for each of the items, I replace the drive location with the stage location on the path, generate the directory structure and then move the file.
 
-__Now another aside__, there is a difference between `Copy-Item` and `Move-Item`, `Copy-Item` will give you an option of `-Recursive`, which means if the directory that the file lives in does not exist, it will created it as part of the process, `Move-Item` doesnt have this luxury.
+__Now another aside__, there is a difference between `Copy-Item` and `Move-Item`, `Copy-Item` will give you an option of `-Recursive`, which means if the directory that the file lives in does not exist, it will create it as part of the process, `Move-Item` doesn't have this luxury.
 
 After I had moved the videos I checked, it had helped, but I was still a few GB over the 5GB limit, rather than worry about size of things I thought I would then concentrate on date, as these are picture images, there is a property called `LastModifiedDate`, this is usually when the picture was taken, if you modified your picture, that would be set here when you did that.
 
 So I chose an arbitrary buffer of 6 months (and ideally, anything older would be moved). I picked all the file types I was interested in.
 
-Appologies in advance for the duplication you may see, I did this for ease of reading the process and also at the time I wasnt sure if I could do the same.
+Apologies in advance for the duplication you may see, I did this for ease of reading the process and also at the time I wasn't sure if I could do the same.
 
 ```
 #now pictures, but only if they are older than 6 months
@@ -112,20 +112,22 @@ Move-Item -Path $item.FullName -Destination $to
 })
 ```
 
-I only wanted known file types, but also to leave collections that I knew existed , until later (possibly), those are defined in the `Where-Object`, comparing the `FullName` to some values I knew existed in the strings.
+I only wanted known file types, but also to leave collections that I knew existed, until later (possibly), those are defined in the `Where-Object`, comparing the `FullName` to some values I knew existed in the strings.
 
 You may see the ` at the end of some lines, this allows your code to extend to a new line.
 
 After all that was done, I was able to reduce my wife's total size down to around 3GB, and I regularly run the move script to keep it under control. There is still some refactoring work and turning this into a `cmdlet` and scheduling the task, should help reduce the work needed by me each time.
 
-## Is there an easier option / alternatives?
+## Is there an easier option/alternatives?
 
-For free? Yes! Move to Google Drive, but as I said at the start, where is the journey and the fun in developing something to solve this first world problem!
+For free? Yes! Move to Google Drive, but as I said at the start, where would the journey have been and the fun in developing something to solve this first world problem!
 
-They still have (at the time of writing this post) 15GB for free, they even offer a process that if you allow them to convert the picture to a high quality version you wont use any of your quota, it probably does degrade the quality of the picture, but unless you are expecting to do something fancy I dont think you would always need to hold on to the full image generated anyway.
+They still have (at the time of writing this post) 15GB for free, they even offer a process that if you allow them to convert the picture to a high-quality version you won't use any of your quota, it probably does degrade the quality of the picture, but unless you are expecting to do something fancy I don't think you would always need to hold on to the full image generated anyway.
 
-Paid, Microsoft are offering the 15GB limit if you buy an Office 365 licence (for around £70 a year).
+Paid, Microsoft is offering the 1TB limit per user (for 5 accounts) if you buy an Office 365 licence (for around £80 a year).
 
 Microsoft also ofter a friends scheme, if you introduce people to one drive you get a boost.
 
-[addtomyonedrive]: https://keyboardsandmonkeys.files.wordpress.com/2016/07/addtomyonedrive.png "Add To OneDrive link"
+[addtomyonedrive]: addtomyonedrive.png "Add To OneDrive link"
+[shared]: shared.png "Share OneDrive directory"
+[canedit]: canedit.png "Image of Camera Roll directory with Can Edit and checked"
