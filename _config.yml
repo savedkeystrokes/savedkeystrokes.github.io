@@ -5,6 +5,6 @@ description: Gathering knowledge and saving keystrokes one at a time…
 defaults:
   -
     scope:
-      path: ""
+      path: "_posts"
     values:
       layout: "default.html"
