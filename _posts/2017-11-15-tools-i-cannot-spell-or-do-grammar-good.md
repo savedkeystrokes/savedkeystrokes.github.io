@@ -3,6 +3,7 @@ layout: post
 title: "tools: I cannot spell or do grammar good!"
 theme: jekyll-theme-slate
 ---
+
 # tools: I cannot spell or do grammar good!
 
 I don't think that I write that well, and I generally just type and type until something looks ok, then I have to go back and review what I have typed to make sure it makes sense, using a tool like Grammarly helps with that.
