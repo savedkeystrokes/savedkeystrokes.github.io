@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "tools: I cannot spell or do grammar good!"
-theme: jekyll-theme-slate
 ---
 
 # tools: I cannot spell or do grammar good!
