@@ -1,3 +1,6 @@
+---
+title: Welcome
+---
 # Welcome, here are some posts
 
 <ul>
