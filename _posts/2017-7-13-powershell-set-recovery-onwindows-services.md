@@ -1,3 +1,7 @@
+---
+layout: post
+title: "PowerShell: Set-Recovery on Windows Services"
+---
 # PowerShell: Set-Recovery on Windows Services
 
 ## Connectivity outage was stopping services

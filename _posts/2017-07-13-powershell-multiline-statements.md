@@ -1,3 +1,7 @@
+---
+layout: post
+title: "PowerShell: Multiline statements"
+---
 # PowerShell: Multiline statements
 
 It is a bit painful sometimes when you write a script and it ends up going off the screen.

@@ -1,3 +1,7 @@
+---
+layout: post
+title: "git: Adding an alias to git for a repository refresh"
+---
 # git: Adding an alias to git for a repository refresh
 
 When working with git, I find myself doing a lot of the same requests, by creating an alias I reduced my keystrokes.

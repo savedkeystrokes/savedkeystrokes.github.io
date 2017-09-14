@@ -1,3 +1,7 @@
+---
+layout: post
+title: "PowerShell: $array.ForEach({})"
+---
 # PowerShell: $array.ForEach({})
 
 ## In the beginning, there was a cmdlet...
