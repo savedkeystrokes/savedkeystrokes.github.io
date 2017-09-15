@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "PowerShell: Multiline statements"
 ---
 # PowerShell: Multiline statements
