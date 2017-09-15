@@ -3,7 +3,7 @@
 ## My latest blog post
 
 {% for post in site.posts limit:1 %}
-  post.content
+{{ post.content }}
 {% endfor %}
 
 ## Here are some posts
