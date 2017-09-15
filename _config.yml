@@ -1,7 +1,6 @@
 theme: jekyll-theme-slate
 title: Saved Keystrokes
 description: Gathering knowledge and saving keystrokes one at a time…
-future: false
 defaults:
   -
     scope:
