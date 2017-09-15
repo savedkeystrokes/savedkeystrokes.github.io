@@ -1,9 +1,11 @@
-# Welcome, here are some posts
+# Welcome!
+
+## Here are some posts
 
 <ul>
   {% for post in site.posts  %}
     <li>
-      <a href="{{ post.url }}">{{ post.title }} ({{post.date | date: ‘%Y %m %d’ }}) - ({{page.excerpt | number_of_words}} words)</a>
+      <a href="{{ post.url }}">{{ post.title }} ({{post.date | date: "%Y %m %d" }}) - ({{page.excerpt | number_of_words}} words)</a>
     </li>
   {% endfor %}
 </ul>
