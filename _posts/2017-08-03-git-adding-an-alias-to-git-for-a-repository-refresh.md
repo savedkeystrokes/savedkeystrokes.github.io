@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "git: Adding an alias to git for a repository refresh"
 ---
 # git: Adding an alias to git for a repository refresh

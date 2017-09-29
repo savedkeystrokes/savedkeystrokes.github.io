@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "PowerShell: $array.ForEach({})"
 ---
 # PowerShell: $array.ForEach({})

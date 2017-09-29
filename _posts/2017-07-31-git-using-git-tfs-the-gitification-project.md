@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "git: using git-tfs - The Gitification Project"
 ---
 # git: using git-tfs - The Gitification Project

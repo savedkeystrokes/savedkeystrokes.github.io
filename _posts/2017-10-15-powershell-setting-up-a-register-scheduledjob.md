@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Powershell: Setting up a Register-ScheduledJob"
 ---
 # Powershell: Setting up a Register-ScheduledJob

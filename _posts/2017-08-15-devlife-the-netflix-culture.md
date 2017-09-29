@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "DevLife: The Netflix Culture"
 ---
 # DevLife: The Netflix Culture
