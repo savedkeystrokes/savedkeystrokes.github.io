@@ -1,6 +1,5 @@
 ---
-layout: post
-title: "tools: I cannot spell or do grammar good!"
+title: "Tools: I cannot spell or do grammar good!"
 ---
 
 # tools: I cannot spell or do grammar good!
