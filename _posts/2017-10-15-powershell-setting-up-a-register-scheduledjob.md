@@ -1,7 +1,7 @@
 ---
-title: "Powershell: Setting up a Register-ScheduledJob"
+title: "PowerShell: Setting up a Register-ScheduledJob"
 ---
-# Powershell: Setting up a Register-ScheduledJob
+# PowerShell: Setting up a Register-ScheduledJob
 
 Let's look at something that I did, I needed to keep an eye on all the recycle bins on a server, that was a separate problem, but I wanted to schedule the job to occur once a week.
 
