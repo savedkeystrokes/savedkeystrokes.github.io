@@ -1,5 +1,6 @@
 ---
-title: "Skills: Insights with Sheryl Sandberg"
+title: "Culture: Insights with Sheryl Sandberg"
+categories: "culture"
 ---
 
 Out of all the podcasts I listen to, I would say that this is one that I regularly look forward to, it doesnt relate much to my day to day, but I have been able to take small ideas and apply them to my day to day.

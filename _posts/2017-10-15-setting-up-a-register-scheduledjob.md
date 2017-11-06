@@ -1,5 +1,6 @@
 ---
 title: "PowerShell: Setting up a Register-ScheduledJob"
+categories: "powershell"
 ---
 # PowerShell: Setting up a Register-ScheduledJob
 

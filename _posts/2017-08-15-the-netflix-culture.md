@@ -1,7 +1,8 @@
 ---
-title: "DevLife: The Netflix Culture"
+title: "Culture: The Netflix Culture"
+categories: "culture"
 ---
-# DevLife: The Netflix Culture
+# Culture: The Netflix Culture
 
 I’ve been listening to a new podcast called [Masters of Scale with Reid Hoffman](https://www.entrepreneur.com/topic/masters-of-scale)
 

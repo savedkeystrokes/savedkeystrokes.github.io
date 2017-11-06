@@ -1,5 +1,6 @@
 ---
 title: "PowerShell: $array.ForEach({})"
+categories: "powershell"
 ---
 # PowerShell: $array.ForEach({})
 

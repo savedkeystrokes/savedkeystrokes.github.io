@@ -1,5 +1,6 @@
 ---
 title: "git: Adding an alias to git for a repository refresh"
+categories: "git"
 ---
 # git: Adding an alias to git for a repository refresh
 

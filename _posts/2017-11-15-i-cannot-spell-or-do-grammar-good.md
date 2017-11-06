@@ -1,5 +1,6 @@
 ---
 title: "Tools: I cannot spell or do grammar good!"
+categories: "tools"
 ---
 
 # tools: I cannot spell or do grammar good!

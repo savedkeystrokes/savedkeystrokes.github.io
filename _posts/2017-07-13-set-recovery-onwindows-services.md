@@ -1,5 +1,6 @@
 ---
 title: "PowerShell: Set-Recovery on Windows Services"
+categories: "powershell"
 ---
 # PowerShell: Set-Recovery on Windows Services
 

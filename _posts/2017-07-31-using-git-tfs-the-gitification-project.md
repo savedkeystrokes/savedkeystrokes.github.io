@@ -1,5 +1,6 @@
 ---
 title: "git: using git-tfs - The Gitification Project"
+categories: "git"
 ---
 # git: using git-tfs - The Gitification Project
 

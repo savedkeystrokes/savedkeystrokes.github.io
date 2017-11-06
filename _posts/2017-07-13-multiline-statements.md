@@ -1,5 +1,6 @@
 ---
 title: "PowerShell: Multiline statements"
+categories: "powershell"
 ---
 # PowerShell: Multiline statements
 
