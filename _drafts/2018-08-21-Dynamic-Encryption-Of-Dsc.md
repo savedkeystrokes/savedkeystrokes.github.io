@@ -8,6 +8,12 @@ categories: "powershell"
 
 When you have a credential secret there is an issue that, at rest on the release agent, you can find an unencrypted plaintext password of the account in the mof, adding a certificate allows you to encrypt the mof in both locations.
 
+I have experienced this every time I need to get a new deployment up and running to a new server, with a secret involved. What I am going to show is a way to shortcut this process and get and use the certificate at run time.
+
+## The Guidelines on Securing a mof
+
+I generally follow the guidelines from the <a href="https://docs.microsoft.com/en-us/powershell/dsc/securemof" target="_blank" rel="noopener">microsoft documentation</a>, but found some of the steps unnecessary.
+
 To encrypt a Dsc process you follow the usual instructions:
 
 - connect to a server,
@@ -19,27 +25,23 @@ To encrypt a Dsc process you follow the usual instructions:
 - add reference to thumbprint and certificate location on Dsc Template and ConfigurationData,
 - Run the job.
 
-I have experienced this every time I need to get a new deployment up and running to a new server, with a secret involved. What I am hopefully going to show is a way to shortcut this process and get and use the certificate at run time.
+What confused me was the need for the certificate to get registered against the authoring server, but also referencing a central store for the certificate, even though it gets imported into the local machine certificate store; turns out this isn't needed!
 
-## The Guidelines on Securing a mof
-
-I generally follow the guidelines from the <a href="https://docs.microsoft.com/en-us/powershell/dsc/securemof" target="_blank" rel="noopener">microsoft documentation</a>, but found some of the steps unnecessary.
-
-What confused me was the need for the certificate to be registered against the authoring server, but also referencing a central store for the certificate, even though it is imported into the local machine certificate store; turns out this isn't needed!
+The only steps needed are Getting the certificate to the authoring server, not installing or saving it to a central store, and providing the thumbprint.
 
 ## The Process
 
-I often break down my process of deployment into a setup and push phase. During the setup I am making sure the servers have everything installed that they need to perform the Dsc action which is handled during the push. So getting the certificate to perform the encryption fits here.
+For a secure mof, you will need:
 
-The configuration is nothing more complicated than a hastable the information can be loaded into memory and modified as needed.
-
-For a mof to be secured, you need:
-
-- a Certificate file for the Target Node
+- a Certificate file, and filepath, for the Target Node
 - a Thumbprint based on the certificate file
-- a CertificateID which comes from the node's thumbprint LocalConfigurationManager
+- a CertificateID for the LocalConfigurationManager, which comes from the certificate thumbprint.
 
-Here is an example Config:
+As configurationData is nothing more complicated than a hashtable, loading the information into memory allows modifications as needed.
+
+Here is an example ConfigData file:
+
+I am defining a `CertificateFile`, with the prefix of the `NodeName`, this isn't the path to the file, but more a pointer to the file. We need to get the certificate from the target node via a session, with some conventions like this applied this makes life a bit easer.
 
 ```powershell
 @{
@@ -56,9 +58,7 @@ NonNodeData = @{
 }
 ```
 
-I am defining a `CertificateFile`, with the prefix of the `NodeName`, this isnt a fully defined path, which is required, but more a pointer to what the file will be called. The reason for this is we need to get the certificate from the target node via a session, with some conventions like this applied this makes life a bit easer. There are probably a load of improvements people could make, this was still v0.5 at the time of writing this.
-
-When the process is started you can load this config into a variable, which allows for modifications to be made.
+Loading the config into a variable allows for modifications at runtime.
 
 ```powershell
 $config = Get-Content ".\Config.psd1" | Out-String | iex
@@ -66,11 +66,9 @@ $config = Get-Content ".\Config.psd1" | Out-String | iex
 
 _The location of the config.psd1 in relation to where you are running the script is important, so if you know or can define the full path do that._
 
-## Getting the Certificate
+### Getting the Certificate (Get-DscEncryptionCertificate)
 
-You will need to instanciate some sessions to the servers that will be targeted during this process.
-
-In your Config you define the servers you want to get to, and using the `NodeName` from the array of servers in your `AllNodes`, you can create all the sessions you need and pass this to the following function.
+You will need to instantiate some sessions to the target servers. In your Config, you already have that list defined. Using the `NodeName` from the array of servers in your `AllNodes`, you can create all the sessions you need and pass this to the Get function.
 
 - **`$WorkingDirectory`** could be `$PSScriptRoot`, this the location where all the scripts are rooted.
 - **`$Sessions`** an array of all the sessions created.
@@ -123,7 +121,7 @@ function Get-DscEncryptionCertificate {
 
 This process, moves all the certificates from the corresponding targets to the authoring server's working directory ready for the Use process.
 
-### Using this Use
+### Using the certificate (Use-DscEncryptionCertificate)
 
 The Use process is part of the Push even, you are ready to generate your mof files so now is where you will encrypt them.
 
@@ -165,40 +163,54 @@ function Use-DscEncryptionCertificate {
 
 ## And Finally
 
-The final steps of encryption are done for you. The addition of the Thumbprint and Full Path to the certificate are added to the ConfigData by the `Use-DscEncryptionCertificate`. Here is an example of the full run from Getting the sessions created and performing the Get and Use functions.
+The final steps of encryption are done for you. The addition of the Thumbprint and Full Path to the certificate are added to the ConfigData by the `Use-DscEncryptionCertificate`. Here is an example of the full run from getting the sessions created, performing the Get and Use functions for the certificate, generating and applying the mof.
 
 ```powershell
+
+# Get the location where the script is running
 $location = $PSScriptRoot
+
+# Move to that location
 Set-Location $location
 
+# Load the config file into a variable
 $config = Get-Content "$location\Config.psd1" | Out-String | iex
 
+# Generate a list of Target NodeNames
 $targets = @()
 $config.AllNodes | Where-Object { $_.Role -eq "WebServer" } | ForEach-Object { $targets += $_.NodeName }
 
+# Create Sessions for all the targets.
 $Sessions = New-PSSession -ComputerName $targets -Credential $deployCred
 
-# Get Certs
+# Call the Get-DscEncryptionCertificate with the working directory of this location and provide all the sessions.
 Get-DscEncryptionCertificate -WorkingDirectory $location -Sessions $Sessions
 
-# Use Certs
+# Close all the sessions
+Remove-PSSesssion $Sessions
+
+# Update the Config data to use the certificate values generated.
 $config = Use-DscEncryptionCertificate -ConfigData $config -WorkingDirectory $location
 
+# Load the Dsc Configuration into Memory
 . $location\DscConfig.ps1
 
+# Apply the ConfigurationData to the Template, and generate the mofs
 Config -ConfigurationData $config -OutputPath $location\Config -Verbose
 
+# Create Cim sessions to target servers.
 $cs = New-CimSession -ComputerName $targets -Credential $deployCred
 
-Write-Host "Start DSC"
-
+# Start LocalConfigurationManager on Targets
 Set-DscLocalConfigurationManager $location\Config -CimSession $cs  -Verbose -ErrorAction Stop
 
+# Apply Dsc
 Start-DscConfiguration -Path $location\Config -CimSession $cs -Verbose -Wait -Force  -ErrorAction Stop
 
+# Close all Cim Sessions
 Remove-CimSession -CimSession $cs
 ```
 
-## Summary
+## Thank you for reading
 
 Thanks for getting this far. This isnt perfect, I will probably find I have shot myself in another way, but this fits how we are working. If there are any suggestions I am more than willing to discuss.
