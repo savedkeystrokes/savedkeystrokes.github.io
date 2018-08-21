@@ -1,8 +1,8 @@
 # Welcome!
 
-## My latest blog post
+{% for post in site.posts | where_exp: "item" "item.date <= site.date' | limit:1 %}
+# My latest blog post ({{post.date | date: '%Y-%m-%d' }})
 
-{% for post in site.posts limit:1 %}
 {{ post.content }}
 {% endfor %}
 
