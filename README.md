@@ -1,12 +1,9 @@
-# Welcome!
-
 {% for post in site.posts | where_exp: "item" "item.date <= site.date' | limit:1 %}
-# My latest blog post ({{post.date | date: '%Y-%m-%d' }})
-
+**My latest blog post ({{post.date | date: '%Y-%m-%d' }})**
 {{ post.content }}
 {% endfor %}
 
-## Here are some posts
+## Here are some more posts
 
 <ul>
   {% for post in site.posts | where_exp: "item" "item.date <= site.date' %}
