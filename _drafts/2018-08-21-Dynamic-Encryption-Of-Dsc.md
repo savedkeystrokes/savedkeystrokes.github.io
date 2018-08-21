@@ -163,4 +163,42 @@ function Use-DscEncryptionCertificate {
 }
 ```
 
-## Some sort of conclusion?
+## And Finally
+
+The final steps of encryption are done for you. The addition of the Thumbprint and Full Path to the certificate are added to the ConfigData by the `Use-DscEncryptionCertificate`. Here is an example of the full run from Getting the sessions created and performing the Get and Use functions.
+
+```powershell
+$location = $PSScriptRoot
+Set-Location $location
+
+$config = Get-Content "$location\Config.psd1" | Out-String | iex
+
+$targets = @()
+$config.AllNodes | Where-Object { $_.Role -eq "WebServer" } | ForEach-Object { $targets += $_.NodeName }
+
+$Sessions = New-PSSession -ComputerName $targets -Credential $deployCred
+
+# Get Certs
+Get-DscEncryptionCertificate -WorkingDirectory $location -Sessions $Sessions
+
+# Use Certs
+$config = Use-DscEncryptionCertificate -ConfigData $config -WorkingDirectory $location
+
+. $location\DscConfig.ps1
+
+Config -ConfigurationData $config -OutputPath $location\Config -Verbose
+
+$cs = New-CimSession -ComputerName $targets -Credential $deployCred
+
+Write-Host "Start DSC"
+
+Set-DscLocalConfigurationManager $location\Config -CimSession $cs  -Verbose -ErrorAction Stop
+
+Start-DscConfiguration -Path $location\Config -CimSession $cs -Verbose -Wait -Force  -ErrorAction Stop
+
+Remove-CimSession -CimSession $cs
+```
+
+## Summary
+
+Thanks for getting this far. This isnt perfect, I will probably find I have shot myself in another way, but this fits how we are working. If there are any suggestions I am more than willing to discuss.
