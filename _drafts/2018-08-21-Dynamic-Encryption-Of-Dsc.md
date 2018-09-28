@@ -6,9 +6,11 @@ categories: "powershell"
 
 ## The Pitch
 
-When you have a credential secret there is an issue that, at rest on the release agent, you can find an unencrypted plaintext password of the account in the mof, adding a certificate allows you to encrypt the mof in both locations.
+When you have a credential secret there is an issue that, at rest, on the release agent, you can find an unencrypted plaintext password of the account in the mof, adding a certificate allows you to encrypt the mof in both locations.
 
 I have experienced this every time I need to get a new deployment up and running to a new server, with a secret involved. What I am going to show is a way to shortcut this process and get and use the certificate at run time.
+
+if you do not secure your mof you can find secrets leaking out of your mof
 
 ## The Guidelines on Securing a mof
 
@@ -210,6 +212,8 @@ Start-DscConfiguration -Path $location\Config -CimSession $cs -Verbose -Wait -Fo
 # Close all Cim Sessions
 Remove-CimSession -CimSession $cs
 ```
+
+![alt](encrypted.png)
 
 ## Thank you for reading
 
