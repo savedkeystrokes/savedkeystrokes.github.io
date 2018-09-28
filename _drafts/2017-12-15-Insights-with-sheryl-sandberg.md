@@ -20,7 +20,7 @@ She mentioned that she had told people she didnt want PowerPoints, this had been
 
 ## Take your whole self to work
 
-I think people already know when you talk to me, I dont put up many filters, which might be a bad thing in some instances, but I believe I am following this rule. 
+I think people already know when you talk to me, I dont put up many filters, which might be a bad thing in some instances, but I believe I am following this rule.
 
 ## Answer your emails straight away
 
